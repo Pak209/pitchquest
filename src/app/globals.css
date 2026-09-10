@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --font-rounded: "Nunito", "Segoe UI Rounded", "Arial Rounded MT Bold", system-ui,
+    sans-serif;
+}
+
+html,
+body {
+  max-width: 100vw;
+  min-height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  font-family: var(--font-rounded);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Prevent iOS tap highlight on game buttons */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
