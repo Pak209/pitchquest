@@ -2,7 +2,7 @@
 
 import type { AppState, ProfileId, ProfileState } from "./types";
 import { STORAGE_KEY } from "./types";
-import { START_UNLOCKED, xpToLevel } from "../game/progression";
+import { START_UNLOCKED, ensureNaturalFloor, xpToLevel } from "../game/progression";
 import type { Timbre } from "../audio/engine";
 
 function defaultProfile(id: ProfileId): ProfileState {
@@ -46,13 +46,15 @@ export function loadAppState(): AppState {
     if (parsed.version !== 1) return defaultAppState();
     // merge defaults for forward-compat fields
     const base = defaultAppState();
+    const son = { ...base.profiles.son, ...parsed.profiles?.son };
+    const dad = { ...base.profiles.dad, ...parsed.profiles?.dad };
+    // Floor: always unlock all naturals (testing); keep any advanced accidentals already earned
+    son.unlockedNotes = ensureNaturalFloor(son.unlockedNotes ?? [...START_UNLOCKED]);
+    dad.unlockedNotes = ensureNaturalFloor(dad.unlockedNotes ?? [...START_UNLOCKED]);
     return {
       ...base,
       ...parsed,
-      profiles: {
-        son: { ...base.profiles.son, ...parsed.profiles?.son },
-        dad: { ...base.profiles.dad, ...parsed.profiles?.dad },
-      },
+      profiles: { son, dad },
     };
   } catch {
     return defaultAppState();

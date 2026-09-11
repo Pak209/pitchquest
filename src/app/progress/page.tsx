@@ -143,7 +143,7 @@ export default function ProgressPage() {
       <Card className="p-4">
         <h2 className="mb-3 font-bold text-star">Unlock path</h2>
         <ul className="space-y-2 text-sm">
-          {UNLOCK_STAGES.slice(0, 4).map((s) => {
+          {UNLOCK_STAGES.slice(0, 2).map((s) => {
             const have = s.notes.every((n) =>
               activeProfile.unlockedNotes.includes(n)
             );

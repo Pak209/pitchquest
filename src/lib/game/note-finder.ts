@@ -17,7 +17,6 @@ export function chooseTargetNote(
     const m = mastery[n];
     if (!m || m.attempts === 0) return 1.4;
     const acc = m.correct / m.attempts;
-    // lower accuracy → higher weight
     return 0.5 + (1 - acc) * 2.5;
   });
   return pickWeighted(unlocked, weights);
@@ -26,11 +25,11 @@ export function chooseTargetNote(
 export function buildChoices(
   answer: string,
   unlocked: string[],
-  count = 3
+  count?: number
 ): string[] {
+  const limit = count ?? unlocked.length;
   const others = shuffle(unlocked.filter((n) => n !== answer));
-  const picks = [answer, ...others].slice(0, Math.min(count, unlocked.length));
-  // If only 2 unlocked, still ok
+  const picks = [answer, ...others].slice(0, Math.min(limit, unlocked.length));
   return shuffle(picks);
 }
 
@@ -43,7 +42,8 @@ export function makeQuestion(
   return {
     answer,
     octave,
-    choices: buildChoices(answer, unlocked, unlocked.length >= 3 ? 3 : unlocked.length),
+    // Show the full unlock set so testers can pick among all notes
+    choices: buildChoices(answer, unlocked, unlocked.length),
   };
 }
 

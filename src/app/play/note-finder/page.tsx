@@ -47,7 +47,7 @@ export default function NoteFinderPage() {
   }, [hydrated, activeProfile, router]);
 
   const unlocked = useMemo(
-    () => activeProfile?.unlockedNotes ?? ["C", "G"],
+    () => activeProfile?.unlockedNotes ?? ["C", "D", "E", "F", "G", "A", "B"],
     [activeProfile?.unlockedNotes]
   );
   const mastery = useMemo(
@@ -179,8 +179,14 @@ export default function NoteFinderPage() {
       </div>
 
       <div
-        className={`grid gap-3 ${
-          question!.choices.length === 2 ? "grid-cols-2" : "grid-cols-3"
+        className={`grid gap-2 sm:gap-3 ${
+          question!.choices.length <= 2
+            ? "grid-cols-2"
+            : question!.choices.length <= 4
+              ? "grid-cols-2"
+              : question!.choices.length <= 8
+                ? "grid-cols-4"
+                : "grid-cols-4 sm:grid-cols-6"
         }`}
       >
         {question!.choices.map((c) => (
@@ -188,7 +194,9 @@ export default function NoteFinderPage() {
             key={c}
             size="xl"
             variant="outline"
-            className="h-24 text-2xl"
+            className={`min-h-20 text-lg sm:text-xl ${
+              c.includes("#") ? "text-base sm:text-lg" : ""
+            }`}
             disabled={!!feedback}
             onClick={() => answer(c)}
           >
